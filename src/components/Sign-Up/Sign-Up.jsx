@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  updateProfile,
 } from "firebase/auth";
 import auth from "../../firebase/firebase_config";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -17,6 +18,7 @@ const Sign_Up = () => {
     const email = e.target.email.value;
     const password = e.target.password.value;
     const accepted = e.target.terms.checked;
+    const name = e.target.name.value;
 
     setError("");
     if (password.length < 6) {
@@ -34,6 +36,10 @@ const Sign_Up = () => {
       .then((result) => {
         console.log(result);
         setSuccess("User Created Successfully.");
+
+        updateProfile(result.user, {
+          displayName: name,
+        });
 
         sendEmailVerification(result.user).then(() => {
           alert("Please check your email and verify your account");
@@ -84,7 +90,7 @@ const Sign_Up = () => {
           <div className="mb-2">
             <input type="checkbox" name="terms" id="terms" />
             <label className="ml-2" htmlFor="terms">
-              Accept our <a href="">Terms and Conditions</a>
+              Accept our <a>Terms and Conditions</a>
             </label>
           </div>
           <br />
